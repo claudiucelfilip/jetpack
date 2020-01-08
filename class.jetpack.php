@@ -7,6 +7,7 @@ use Automattic\Jetpack\Connection\REST_Connector as REST_Connector;
 use Automattic\Jetpack\Connection\XMLRPC_Connector as XMLRPC_Connector;
 use Automattic\Jetpack\Connection\Utils as Connection_Utils;
 use Automattic\Jetpack\Constants;
+use Automattic\Jetpack\Partner;
 use Automattic\Jetpack\Roles;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Sync\Functions;
@@ -653,9 +654,6 @@ class Jetpack {
 		add_action( 'wp_ajax_jetpack_connection_banner', array( $this, 'jetpack_connection_banner_callback' ) );
 
 		add_action( 'wp_loaded', array( $this, 'register_assets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'devicepx' ) );
-		add_action( 'customize_controls_enqueue_scripts', array( $this, 'devicepx' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'devicepx' ) );
 
 		add_action( 'plugins_loaded', array( $this, 'extra_oembed_providers' ), 100 );
 
@@ -672,7 +670,6 @@ class Jetpack {
 		add_action( 'style_loader_src', array( 'Jetpack', 'set_suffix_on_min' ), 10, 2 );
 		add_filter( 'style_loader_tag', array( 'Jetpack', 'maybe_inline_style' ), 10, 2 );
 
-		add_filter( 'map_meta_cap', array( $this, 'jetpack_custom_caps' ), 1, 4 );
 		add_filter( 'profile_update', array( 'Jetpack', 'user_meta_cleanup' ) );
 
 		add_filter( 'jetpack_get_default_modules', array( $this, 'filter_default_modules' ) );
@@ -744,6 +741,7 @@ class Jetpack {
 	 */
 	function after_plugins_loaded() {
 
+		Partner::init();
 		$terms_of_service = new Terms_Of_Service();
 		$tracking = new Plugin_Tracking();
 		if ( $terms_of_service->has_agreed() ) {
@@ -754,6 +752,8 @@ class Jetpack {
 			 */
 			add_action( 'jetpack_agreed_to_terms_of_service', array( $tracking, 'init' ) );
 		}
+
+		add_filter( 'map_meta_cap', array( $this, 'jetpack_custom_caps' ), 1, 4 );
 	}
 
 	/**
@@ -1201,16 +1201,6 @@ class Jetpack {
 		}
 
 		return $locale;
-	}
-
-	/**
-	 * Device Pixels support
-	 * This improves the resolution of gravatars and wordpress.com uploads on hi-res and zoomed browsers.
-	 */
-	function devicepx() {
-		if ( self::is_active() && ! Jetpack_AMP_Support::is_amp_request() ) {
-			wp_enqueue_script( 'devicepx', 'https://s0.wp.com/wp-content/js/devicepx-jetpack.js', array(), gmdate( 'oW' ), true );
-		}
 	}
 
 	/**
@@ -4634,14 +4624,16 @@ endif;
 			$url = add_query_arg( 'from', $from, $url );
 		}
 
-		// Ensure that class to get the affiliate code is loaded
-		if ( ! class_exists( 'Jetpack_Affiliate' ) ) {
-			require_once JETPACK__PLUGIN_DIR . 'class.jetpack-affiliate.php';
-		}
-		// Get affiliate code and add it to the URL
-		$url = Jetpack_Affiliate::init()->add_code_as_query_arg( $url );
-
-		return $raw ? esc_url_raw( $url ) : esc_url( $url );
+		$url = $raw ? esc_url_raw( $url ) : esc_url( $url );
+		/**
+		 * Filter the URL used when connecting a user to a WordPress.com account.
+		 *
+		 * @since 8.1.0
+		 *
+		 * @param string $url Connection URL.
+		 * @param bool   $raw If true, URL will not be escaped.
+		 */
+		return apply_filters( 'jetpack_build_connection_url', $url, $raw );
 	}
 
 	public static function build_authorize_url( $redirect = false, $iframe = false ) {
@@ -5609,7 +5601,9 @@ endif;
 				$value = $value[0];
 			}
 			$state[ $key ] = $value;
-			setcookie( "jetpackState[$key]", $value, 0, $path, $domain );
+			if ( ! headers_sent() ) {
+				setcookie( "jetpackState[$key]", $value, 0, $path, $domain );
+			}
 		}
 	}
 
