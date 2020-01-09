@@ -265,6 +265,7 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 						isActive: styleOption.value === style,
 						onClick: () => setAttributes( { style: styleOption.value } ),
 					} ) ) }
+					popoverProps={ { className: 'is-calendly' } }
 				/>
 			) }
 		</BlockControls>
