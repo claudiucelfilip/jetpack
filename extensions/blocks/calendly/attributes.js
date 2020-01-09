@@ -3,7 +3,7 @@
  */
 import { reduce } from 'lodash';
 
-const hexRegex = /^[A-Fa-f0-9]{6}$/;
+const hexRegex = /^#?[A-Fa-f0-9]{6}$/;
 
 const colourValidator = value => hexRegex.test( value );
 
@@ -19,6 +19,7 @@ export default {
 		type: 'string',
 		default: 'Schedule time with me',
 	},
+	submitButtonClasses: { type: 'string' },
 	hideEventTypeDetails: {
 		type: 'boolean',
 		default: false,
@@ -41,6 +42,20 @@ export default {
 	url: {
 		type: 'string',
 		validator: urlValidator,
+	},
+	backgroundButtonColor: {
+		type: 'string',
+	},
+	textButtonColor: {
+		type: 'string',
+	},
+	customBackgroundButtonColor: {
+		type: 'string',
+		validator: colourValidator,
+	},
+	customTextButtonColor: {
+		type: 'string',
+		validator: colourValidator,
 	},
 };
 
