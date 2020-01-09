@@ -1,6 +1,7 @@
 /**
  * External Dependencies
  */
+import 'url-polyfill';
 import classnames from 'classnames';
 import { isEqual } from 'lodash';
 
