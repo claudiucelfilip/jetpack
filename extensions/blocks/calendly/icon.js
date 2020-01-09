@@ -5,12 +5,12 @@ import { SVG, G, Path, Rect } from '@wordpress/components';
 
 export default (
 	<SVG height="24" viewBox="0 0 23 24" width="23" xmlns="http://www.w3.org/2000/svg">
-		<G fill="none" fill-rule="evenodd">
+		<G fill="none" fillRule="evenodd">
 			<Rect
 				height="20.956522"
 				rx="3"
 				stroke="#656a74"
-				stroke-width="2"
+				strokeWidth="2"
 				width="20.956522"
 				x="1"
 				y="2.043478"

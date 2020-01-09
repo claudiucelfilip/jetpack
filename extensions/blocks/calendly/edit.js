@@ -211,7 +211,7 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 				src={ iframeSrc() }
 				width="100%"
 				height="100%"
-				frameborder="0"
+				frameBorder="0"
 				data-origwidth="100%"
 				data-origheight="100%"
 				style={ { minWidth: '320px', height: '630px', width: '100%' } }
@@ -230,7 +230,7 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 
 	const linkPreview = (
 		<>
-			<a style={ { alignSelf: 'flex-start', border: 'none' } } class="wp-block-button__link">
+			<a style={ { alignSelf: 'flex-start', border: 'none' } } className="wp-block-button__link">
 				{ submitButtonText }
 			</a>
 		</>
