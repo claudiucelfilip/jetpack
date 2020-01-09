@@ -73,8 +73,8 @@ function jetpack_opentable_block_load_assets( $attributes ) {
 /**
  * Get the a block attribute
  *
- * @param array $attributes Array of block attributes.
- * @param array $attribute_name The attribute to get.
+ * @param array  $attributes Array of block attributes.
+ * @param string $attribute_name The attribute to get.
  *
  * @return string The filtered attribute
  */
@@ -94,7 +94,7 @@ function jetpack_opentable_block_get_attribute( $attributes, $attribute_name ) {
 		'newtab' => 'false',
 	);
 
-	return $default_attributes[ $attribute_name ];
+	return isset( $default_attributes[ $attribute_name ] ) ? $default_attributes[ $attribute_name ] : null;
 }
 
 /**
@@ -118,6 +118,16 @@ function jetpack_opentable_block_get_type_attribute( $attributes ) {
 
 /**
  * Get the block theme attribute
+ *
+ * OpenTable has a confusing mix of themes and styles for the widget. A style
+ * can have a theme, but the button style can not have a theme.
+ *
+ * Style       Theme
+ * ==========|==========
+ * Standord  | Standard
+ *           | Wide
+ *           | Tall
+ * Button    | Standard
  *
  * @param array $attributes Array of block attributes.
  *
