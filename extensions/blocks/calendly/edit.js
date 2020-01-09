@@ -167,14 +167,14 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 					{ _x( 'Embed', 'button label', 'jetpack' ) }
 				</Button>
 			</div>
-			<p>
+			<div className={ `${ className }-learn-more` }>
 				<ExternalLink
 					href="https://help.calendly.com/hc/en-us/articles/223147027-Embed-options-overview"
 					target="_blank"
 				>
 					{ __( 'Need help finding your embed code?' ) }
 				</ExternalLink>
-			</p>
+			</div>
 		</form>
 	);
 
