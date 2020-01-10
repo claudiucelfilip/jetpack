@@ -36,36 +36,13 @@ import attributeDetails, { getValidatedAttributes } from './attributes';
 import SubmitButton from '../../shared/submit-button';
 import { getURLFromEmbedCode } from './utils';
 
-const getUrlAndStyleFromEmbedCode = embedCode => {
-	if ( embedCode.indexOf( 'http' ) === 0 ) {
-		return {
-			style: 'inline',
-			url: embedCode,
-		};
+const getStyleFromEmbedCode = embedCode => {
+	if ( embedCode.indexOf( 'data-url' ) > 0 ) {
+		return 'inline';
 	}
 
-	let urlFromRegex = embedCode.match( / *data-url *= *["']?([^"']*)/i );
-	if ( urlFromRegex && urlFromRegex[ 1 ] && urlFromRegex[ 1 ].indexOf( 'http' ) === 0 ) {
-		return {
-			style: 'inline',
-			url: urlFromRegex[ 1 ],
-		};
-	}
-
-	urlFromRegex = embedCode.match( / *Calendly\.initPopupWidget\({ *url: *["']?([^"']*)/i );
-	if ( urlFromRegex && urlFromRegex[ 1 ] && urlFromRegex[ 1 ].indexOf( 'http' ) === 0 ) {
-		return {
-			style: 'link',
-			url: urlFromRegex[ 1 ],
-		};
-	}
-
-	urlFromRegex = embedCode.match( / *Calendly\.initBadgeWidget\({ *url: *["']?([^"']*)/i );
-	if ( urlFromRegex && urlFromRegex[ 1 ] && urlFromRegex[ 1 ].indexOf( 'http' ) === 0 ) {
-		return {
-			style: 'link',
-			url: urlFromRegex[ 1 ],
-		};
+	if ( embedCode.indexOf( 'initPopupWidget' ) > 0 || embedCode.indexOf( 'initBadgeWidget' ) > 0 ) {
+		return 'link';
 	}
 };
 
@@ -145,14 +122,18 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 			return;
 		}
 
-		const newUrlAndStyle = getUrlAndStyleFromEmbedCode( embedCode );
-		if ( ! newUrlAndStyle ) {
+		const newUrl = getURLFromEmbedCode( embedCode );
+		if ( ! newUrl ) {
 			setErrorNotice();
 			return;
 		}
 
-		const newUrl = getURLFromEmbedCode( embedCode );
-		newUrlAndStyle.url = newUrl;
+		const newUrlAndStyle = {
+			url: newUrl,
+		};
+
+		const newStyle = getStyleFromEmbedCode( embedCode );
+		newUrlAndStyle.style = newStyle;
 
 		setAttributes( getNewAttributesFromUrl( newUrlAndStyle ) );
 	};
