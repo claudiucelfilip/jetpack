@@ -34,17 +34,7 @@ import './editor.scss';
 import icon from './icon';
 import attributeDetails, { getValidatedAttributes } from './attributes';
 import SubmitButton from '../../shared/submit-button';
-import { getURLFromEmbedCode } from './utils';
-
-const getStyleFromEmbedCode = embedCode => {
-	if ( embedCode.indexOf( 'data-url' ) > 0 ) {
-		return 'inline';
-	}
-
-	if ( embedCode.indexOf( 'initPopupWidget' ) > 0 || embedCode.indexOf( 'initBadgeWidget' ) > 0 ) {
-		return 'link';
-	}
-};
+import { getURLFromEmbedCode, getStyleFromEmbedCode } from './utils';
 
 const getNewAttributesFromUrl = ( { url, style } ) => {
 	const attributes = { style };
