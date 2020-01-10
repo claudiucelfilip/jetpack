@@ -36,8 +36,8 @@ import attributeDetails, { getValidatedAttributes } from './attributes';
 import SubmitButton from '../../shared/submit-button';
 import { getURLFromEmbedCode, getStyleFromEmbedCode } from './utils';
 
-const getNewAttributesFromUrl = ( { url, style } ) => {
-	const attributes = { style };
+const getNewAttributesFromUrl = url => {
+	const attributes = {};
 	const urlObject = new URL( url );
 	attributes.url = urlObject.origin + urlObject.pathname;
 
@@ -118,14 +118,12 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 			return;
 		}
 
-		const newUrlAndStyle = {
-			url: newUrl,
-		};
+		setAttributes( getNewAttributesFromUrl( newUrl ) );
 
 		const newStyle = getStyleFromEmbedCode( embedCode );
-		newUrlAndStyle.style = newStyle;
-
-		setAttributes( getNewAttributesFromUrl( newUrlAndStyle ) );
+		if ( newStyle ) {
+			setAttributes( { style: newStyle } );
+		}
 	};
 
 	const embedCodeForm = (
