@@ -220,7 +220,18 @@ function jetpack_photon_url( $image_url, $args = array(), $scheme = null ) {
 
 	return jetpack_photon_url_scheme( $photon_url, $scheme );
 }
-add_filter( 'jetpack_photon_url', 'jetpack_photon_url', 10, 3 );
+
+/**
+ * Add an easy way to photon-ize a URL that is safe to call even if Jetpack isn't active.
+ *
+ * See: https://jetpack.com/2013/07/11/photon-and-themes/
+ */
+function add_jetpack_photon_url_filter() {
+	if ( Jetpack::is_module_active( 'photon' ) ) {
+		add_filter( 'jetpack_photon_url', 'jetpack_photon_url', 10, 3 );
+	}
+}
+add_action( 'plugins_loaded', 'add_jetpack_photon_url_filter' );
 
 /**
  * WordPress.com
