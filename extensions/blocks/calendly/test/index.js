@@ -5,7 +5,7 @@
 /**
  * Internal dependencies
  */
-import { getURLFromEmbedCode, getStyleFromEmbedCode } from '../utils';
+import { getURLFromEmbedCode, getStyleFromEmbedCode, getSubmitButtonTextFromEmbedCode } from '../utils';
 
 const inlineEmbedCode = '<!-- Calendly inline widget begin -->' +
 	'<div class="calendly-inline-widget" data-url="https://calendly.com/scruffian/usability-test" style="min-width:320px;height:630px;"></div>' +
@@ -32,7 +32,7 @@ const customInlineEmbedCode = '<!-- Calendly inline widget begin -->' +
 const customWidgetEmbedCode = '<!-- Calendly badge widget begin -->' +
 	'<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">' +
 	'<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>' +
-	'<script type="text/javascript">Calendly.initBadgeWidget({ url: \'https://calendly.com/scruffian/usability-test?background_color=c51414&text_color=2563ca&primary_color=1d73a4\', text: \'Schedule some with me\', color: \'#000609\', textColor: \'#b50000\', branding: true });</script>' +
+	'<script type="text/javascript">Calendly.initBadgeWidget({ url: \'https://calendly.com/scruffian/usability-test?background_color=c51414&text_color=2563ca&primary_color=1d73a4\', text: \'Schedule some time with me\', color: \'#000609\', textColor: \'#b50000\', branding: true });</script>' +
 	'<!-- Calendly badge widget end -->';
 
 const customTextEmbedCode = '<!-- Calendly link widget begin -->' +
@@ -85,6 +85,12 @@ describe( 'calendly-parse-embed', () => {
 		).toBe(
 			'link'
 		);
+
+		expect(
+			getSubmitButtonTextFromEmbedCode( customWidgetEmbedCode )
+		).toBe(
+			'Schedule some time with me'
+		);
 	} );
 
 	test( 'Text embed code', () => {
@@ -98,6 +104,12 @@ describe( 'calendly-parse-embed', () => {
 			getStyleFromEmbedCode( textEmbedCode )
 		).toBe(
 			'link'
+		);
+
+		expect(
+			getSubmitButtonTextFromEmbedCode( textEmbedCode )
+		).toBe(
+			'Schedule time with me'
 		);
 	} );
 
@@ -127,6 +139,12 @@ describe( 'calendly-parse-embed', () => {
 		).toBe(
 			'link'
 		);
+
+		expect(
+			getSubmitButtonTextFromEmbedCode( customWidgetEmbedCode )
+		).toBe(
+			'Schedule some time with me'
+		);
 	} );
 
 	test( 'Customised text embed code', () => {
@@ -140,6 +158,12 @@ describe( 'calendly-parse-embed', () => {
 			getStyleFromEmbedCode( customTextEmbedCode )
 		).toBe(
 			'link'
+		);
+
+		expect(
+			getSubmitButtonTextFromEmbedCode( customTextEmbedCode )
+		).toBe(
+			'Schedule some time with me'
 		);
 	} )
 } );
