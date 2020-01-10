@@ -34,6 +34,7 @@ import './editor.scss';
 import icon from './icon';
 import attributeDetails, { getValidatedAttributes } from './attributes';
 import SubmitButton from '../../shared/submit-button';
+import { getURLFromEmbedCode } from './utils';
 
 const getUrlAndStyleFromEmbedCode = embedCode => {
 	if ( embedCode.indexOf( 'http' ) === 0 ) {
@@ -149,6 +150,9 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 			setErrorNotice();
 			return;
 		}
+
+		const newUrl = getURLFromEmbedCode( embedCode );
+		newUrlAndStyle.url = newUrl;
 
 		setAttributes( getNewAttributesFromUrl( newUrlAndStyle ) );
 	};
