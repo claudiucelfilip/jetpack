@@ -19,6 +19,14 @@ export default {
 		type: 'string',
 		default: 'Schedule time with me',
 	},
+	submitButtonTextColor: {
+		type: 'string',
+		validator: colourValidator,
+	},
+	submitButtonBackgroundColor: {
+		type: 'string',
+		validator: colourValidator,
+	},
 	submitButtonClasses: { type: 'string' },
 	hideEventTypeDetails: {
 		type: 'boolean',

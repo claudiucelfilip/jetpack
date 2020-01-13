@@ -11,6 +11,14 @@ export const getSubmitButtonTextFromEmbedCode = embedCode => {
 	return embedCode.match( /(?<=text: ').*?(?=')/ )[ 0 ];
 };
 
+const getSubmitButtonTextColorFromEmbedCode = embedCode => {
+	return embedCode.match( /(?<= textColor: ').*?(?=')/ )[ 0 ];
+};
+
+const getSubmitButtonBackgroundColorFromEmbedCode = embedCode => {
+	return embedCode.match( /(?<= color: ').*?(?=')/ )[ 0 ];
+};
+
 export const getAttributesFromUrl = url => {
 	const attributes = {};
 	const urlObject = new URL( url );
@@ -75,6 +83,16 @@ export const getAttributesFromEmbedCode = embedCode => {
 	const submitButtonText = getSubmitButtonTextFromEmbedCode( embedCode );
 	if ( submitButtonText ) {
 		newAttributes.submitButtonText = submitButtonText;
+	}
+
+	const submitButtonTextColor = getSubmitButtonTextColorFromEmbedCode( embedCode );
+	if ( submitButtonTextColor ) {
+		newAttributes.customTextButtonColor = submitButtonTextColor;
+	}
+
+	const submitButtonBackgroundColor = getSubmitButtonBackgroundColorFromEmbedCode( embedCode );
+	if ( submitButtonBackgroundColor ) {
+		newAttributes.customBackgroundButtonColor = submitButtonBackgroundColor;
 	}
 
 	return newAttributes;
