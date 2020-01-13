@@ -4,6 +4,7 @@
 import 'url-polyfill';
 import classnames from 'classnames';
 import { isEqual } from 'lodash';
+import queryString from 'query-string';
 
 /**
  * WordPress dependencies
@@ -122,15 +123,16 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 		</Placeholder>
 	);
 
-	const hideEventTypeDetailsTemplateLiteral = hideEventTypeDetails ? 1 : 0;
-
 	const iframeSrc = () => {
-		let src = `${ url }?embed_domain=wordpress.com&amp;embed_type=Inline`;
-		src += `&amp;hide_event_type_details=${ hideEventTypeDetailsTemplateLiteral }`;
-		src += `&amp;background_color=${ backgroundColor }`;
-		src += `&amp;primary_color=${ primaryColor }`;
-		src += `&amp;text_color=${ textColor }`;
-		return src;
+		const query = queryString.stringify( {
+			embed_domain: 'wordpress.com',
+			embed_type: 'Inline',
+			hide_event_type_details: hideEventTypeDetails ? 1 : 0,
+			background_color: backgroundColor,
+			primary_color: primaryColor,
+			text_color: textColor,
+		} );
+		return `${ url }?${ query }`;
 	};
 
 	const inlinePreview = (
