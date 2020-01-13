@@ -3,20 +3,29 @@ export const getURLFromEmbedCode = embedCode => {
 };
 
 export const getSubmitButtonTextFromEmbedCode = embedCode => {
-	const submitButtonText = embedCode.match( /(?<=;"\>).+(?=<\/)/ );
+	let submitButtonText = embedCode.match( /(?<=false;"\>).+(?=<\/)/ );
 	if ( submitButtonText ) {
 		return submitButtonText[ 0 ];
 	}
 
-	return embedCode.match( /(?<=text: ').*?(?=')/ )[ 0 ];
+	submitButtonText = embedCode.match( /(?<=text: ').*?(?=')/ );
+	if ( submitButtonText ) {
+		return submitButtonText[ 0 ];
+	}
 };
 
 const getSubmitButtonTextColorFromEmbedCode = embedCode => {
-	return embedCode.match( /(?<= textColor: ').*?(?=')/ )[ 0 ];
+	const submitButtonTextColor = embedCode.match( /(?<= textColor: ').*?(?=')/ );
+	if ( submitButtonTextColor ) {
+		return submitButtonTextColor[ 0 ];
+	}
 };
 
 const getSubmitButtonBackgroundColorFromEmbedCode = embedCode => {
-	return embedCode.match( /(?<= color: ').*?(?=')/ )[ 0 ];
+	const submitButtonBackgroundColor = embedCode.match( /(?<= color: ').*?(?=')/ );
+	if ( submitButtonBackgroundColor ) {
+		return submitButtonBackgroundColor[ 0 ];
+	}
 };
 
 export const getAttributesFromUrl = url => {
@@ -53,7 +62,7 @@ export const getAttributesFromUrl = url => {
 	return attributes;
 };
 
-export const getStyleFromEmbedCode = embedCode => {
+const getStyleFromEmbedCode = embedCode => {
 	if ( embedCode.indexOf( 'data-url' ) > 0 ) {
 		return 'inline';
 	}
