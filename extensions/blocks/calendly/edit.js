@@ -8,12 +8,7 @@ import { isEqual } from 'lodash';
 /**
  * WordPress dependencies
  */
-import {
-	BlockControls,
-	BlockIcon,
-	InspectorControls,
-	PanelColorSettings,
-} from '@wordpress/block-editor';
+import { BlockControls, BlockIcon, InspectorControls } from '@wordpress/block-editor';
 import {
 	Button,
 	ExternalLink,
@@ -240,27 +235,6 @@ export default function CalendlyEdit( { attributes, className, setAttributes } )
 							} ) }
 						</div>
 					</PanelBody>
-
-					<PanelColorSettings
-						title={ __( 'Embed Color Settings', 'jetpack' ) }
-						colorSettings={ [
-							{
-								value: '#' + backgroundColor,
-								onChange: nextColor => setAttributes( { backgroundColor: nextColor.substr( 1 ) } ),
-								label: __( 'Background Color', 'jetpack' ),
-							},
-							{
-								value: '#' + primaryColor,
-								onChange: nextColor => setAttributes( { primaryColor: nextColor.substr( 1 ) } ),
-								label: __( 'Primary Color', 'jetpack' ),
-							},
-							{
-								value: '#' + textColor,
-								onChange: nextColor => setAttributes( { textColor: nextColor.substr( 1 ) } ),
-								label: __( 'Text Color', 'jetpack' ),
-							},
-						] }
-					/>
 				</>
 			) }
 
