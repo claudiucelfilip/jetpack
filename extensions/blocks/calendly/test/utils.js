@@ -54,7 +54,7 @@ describe( 'getAttributesFromEmbedCode', () => {
 	
 	test( 'URL without http', () => {
 		expect(
-			getAttributesFromEmbedCode( '//calendly.com/scruffian/usability-test' )
+			getAttributesFromEmbedCode( 'calendly.com/scruffian/usability-test' )
 		).toEqual(
 			{
 				"url": "https://calendly.com/scruffian/usability-test"
