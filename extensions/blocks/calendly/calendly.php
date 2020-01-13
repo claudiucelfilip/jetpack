@@ -27,12 +27,14 @@ function jetpack_calendly_block_load_assets( $attr, $content ) {
 		return;
 	}
 
-	$style                   = jetpack_calendly_block_get_attribute( $attr, 'style' );
-	$submit_button_text      = jetpack_calendly_block_get_attribute( $attr, 'submitButtonText' );
-	$background_color        = jetpack_calendly_block_get_attribute( $attr, 'backgroundColor' );
-	$text_color              = jetpack_calendly_block_get_attribute( $attr, 'textColor' );
-	$primary_color           = jetpack_calendly_block_get_attribute( $attr, 'primaryColor' );
-	$hide_event_type_details = jetpack_calendly_block_get_attribute( $attr, 'hideEventTypeDetails' );
+	$style                          = jetpack_calendly_block_get_attribute( $attr, 'style' );
+	$submit_button_text             = jetpack_calendly_block_get_attribute( $attr, 'submitButtonText' );
+	$submit_button_text_color       = jetpack_calendly_block_get_attribute( $attr, 'customTextButtonColor' );
+	$submit_button_background_color = jetpack_calendly_block_get_attribute( $attr, 'customBackgroundButtonColor' );
+	$background_color               = jetpack_calendly_block_get_attribute( $attr, 'backgroundColor' );
+	$text_color                     = jetpack_calendly_block_get_attribute( $attr, 'textColor' );
+	$primary_color                  = jetpack_calendly_block_get_attribute( $attr, 'primaryColor' );
+	$hide_event_type_details        = jetpack_calendly_block_get_attribute( $attr, 'hideEventTypeDetails' );
 
 	$url = add_query_arg(
 		array(
@@ -60,10 +62,43 @@ function jetpack_calendly_block_load_assets( $attr, $content ) {
 			wp_print_scripts( 'jetpack-gutenberg-calendly-external-js' );
 			$content .= ob_get_clean();
 			$settings = "{url: '" . $url . "'}";
-			$content .= '<div><a class="button" href="" onclick="Calendly.initPopupWidget(' . $settings . ');return false;">' . $submit_button_text . '</a></div>';
+
+			$style_attribute = jetpack_calendly_get_button_style_attribute( $submit_button_text_color, $submit_button_background_color );
+
+			$content .= '<div><a class="button" href="" onclick="Calendly.initPopupWidget(' . $settings . ');return false;" ' . $style_attribute . '>' . $submit_button_text . '</a></div>';
 			break;
 	}
 	return $content;
+}
+
+/**
+ * Get the style attribute for the submit button
+ *
+ * @param array  $submit_button_text_color         String containing the button text color.
+ * @param string $submit_button_background_color   String containing the button background color.
+ *
+ * @return string
+ */
+function jetpack_calendly_get_button_style_attribute( $submit_button_text_color, $submit_button_background_color ) {
+	$styles = array();
+	if ( $submit_button_text_color ) {
+		$styles['color'] = $submit_button_text_color;
+	}
+
+	if ( $submit_button_background_color ) {
+		$styles['background-color'] = $submit_button_background_color;
+	}
+
+	$style_attribute = '';
+	if ( count( $styles ) ) {
+		$style_attribute = 'style="';
+		foreach ( $styles as $style => $style_value ) {
+			$style_attribute .= $style . ': ' . $style_value . '; ';
+		}
+		$style_attribute .= '"';
+	}
+
+	return $style_attribute;
 }
 
 /**
